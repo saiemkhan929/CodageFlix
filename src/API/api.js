@@ -36,6 +36,24 @@ const posterURL = (part, size = "m") => {
   }
 };
 
+const useVideoDetails = (id, dependencies = []) => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    instance
+      .get(`/movie/${id}/videos${API_KEY}&language=en-US`)
+      .then((onlineData) => {
+        setData(onlineData.data.results);
+      });
+
+    return () => {
+      console.log("Clean up performing");
+    };
+  }, dependencies);
+
+  return data;
+};
+
 //Create base url
 const instance = axios.create({
   baseURL: BASE_URL,
@@ -58,4 +76,4 @@ const useFetch = (URL, dependencies = []) => {
   return data;
 };
 
-export { posterURL, instance, API_CONSTS, useFetch };
+export { posterURL, instance, API_CONSTS, useFetch, API_KEY };

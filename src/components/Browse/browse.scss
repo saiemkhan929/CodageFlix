@@ -13,7 +13,7 @@ body {
 }
 
 .row_wrapper {
-  width: 95%;
+  width: 100%;
   margin: auto;
 
   transition: all 0.5s ease;
@@ -78,6 +78,11 @@ body {
     }
   }
 
+  .slick-list{
+    overflow: visible;
+  }
+
+
   .slick-next {
     right: 0px;
   }
@@ -135,10 +140,117 @@ body {
   .right_button {
     display: none;
   }
+
+
+
+
+/* Everything About popup*/
+
+  .popup{
+    flex-direction: column;
+    text-align: center;
+    position: absolute;
+    z-index: 1;
+    display: none;
+    width: 0px;
+    transition: all 0.5s ease;
+    box-shadow:  0 0 10px #000;
+
+    .upper{
+        img{
+          width: 100%;
+        }
+    }
+  
+    .lower{
+      
+      .btn_groups{
+        display: flex;
+        justify-content: center;
+        
+  
+        a{
+          text-align: center;
+          border:2px solid white;
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          line-height: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 5px;
+        }
+      }
+      .genres{
+          ul{
+            list-style: none;
+            display: flex;
+            text-align: center;
+            justify-content: center;
+            margin: 0;
+            padding: 15px 0;
+
+            li{
+              margin: 0 5px;
+            }
+          }
+      }
+
+      visibility: hidden;
+      padding: 10px;
+      height: 0px;
+      overflow: hidden;
+    }
+
+
+    &:hover{
+      width: 400px !important;
+      z-index: 0;
+      margin-left: -50px;
+      border-radius: 10px;
+      overflow: hidden;
+
+
+      .lower{
+        transition: visibility 3s;
+        transition: height .2s;
+        transition-delay: .4s;
+        height: auto;
+        visibility: visible;
+        background-color: #141414;
+        
+      }
+    }
+  }
+
+
+    z-index: 1;
+
+    &:hover{
+      z-index: 9;
+      position: relative;
+    }
+  
+
+  .col{
+    z-index: 0;
+    transition: all 0.5s ease;
+  }
+
+  .col:hover {
+    z-index: 9;
+    .popup{
+      display: flex;
+      top: 0;
+      width: 253px;
+    }
+  }
+
 }
 
 
-
+/*Banner */
 .banner{
   min-height: 800px;
   padding: 40px;
@@ -260,9 +372,15 @@ body {
   .right_part{
       text-align: right;
   }
+
+
+
 }
 
 .header.black_header{
   background-color: #141414;
   transition: background-color 0.5s ease;
 }
+
+
+

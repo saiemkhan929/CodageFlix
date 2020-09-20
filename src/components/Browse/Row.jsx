@@ -1,12 +1,14 @@
 import React from "react";
 import { posterURL } from "../../API/api";
 import Slider from "react-slick";
+import Popup from "./Popup";
 
-function Row({ title, videos }) {
+function Row({ title, videos, isPopActive }) {
   const sanitizer = (text) => {
     return text.replace(/#/gi, "");
   };
 
+  //Slider Prev button
   const Prev = ({ onClick }) => {
     return (
       <div className="left_button" onClick={onClick}>
@@ -15,6 +17,7 @@ function Row({ title, videos }) {
     );
   };
 
+  //Slider Next button
   const Next = ({ onClick }) => {
     return (
       <div className="right_button" onClick={onClick}>
@@ -22,6 +25,9 @@ function Row({ title, videos }) {
       </div>
     );
   };
+
+  //select popup div
+  let popup = document.querySelector(".popup");
 
   var settings = {
     dots: true,
@@ -51,6 +57,7 @@ function Row({ title, videos }) {
             media_type,
             poster_path,
             backdrop_path,
+            id,
           } = item;
           const title__ = original_title
             ? sanitizer(original_title)
@@ -61,12 +68,18 @@ function Row({ title, videos }) {
           if (backdrop_path == null) return;
 
           return (
-            <div className="col" key={item.id}>
+            <div
+              className="col"
+              key={item.id}
+              onMouseOver={(e) => {}}
+              onMouseOut={(e) => {}}
+            >
               <img
                 className="poster"
                 src={posterURL(backdrop_path, "s")}
                 alt={title__}
               />
+              <Popup src={posterURL(backdrop_path, "l")} id={id} />
             </div>
           );
         })}

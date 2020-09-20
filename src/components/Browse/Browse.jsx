@@ -26,9 +26,14 @@ const bannerInfo = (variable) => {
     // Generate a random number
     var i = Math.floor(Math.random() * variable.length - 1);
 
+    console.log(variable[i].backdrop_path);
+
     // fetch the banner image from there
     banner_image =
-      variable[i].backdrop_path != undefined ? variable[i].backdrop_path : null;
+      variable[i].backdrop_path != undefined ||
+      null != variable[i].backdrop_path
+        ? variable[i].backdrop_path
+        : null;
     console.log("Found and url was :", banner_image + " and i: " + i);
     let count = 0;
     while (
