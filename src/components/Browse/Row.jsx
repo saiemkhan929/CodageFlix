@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { posterURL } from "../../API/api";
 import Slider from "react-slick";
 
-function Row({ title, videos }) {
+function Row({ title, videos, funcs, tag, pop }) {
   const sanitizer = (text) => {
     return text.replace(/#/gi, "");
   };
 
+  //Slider Prev button
   const Prev = ({ onClick }) => {
     return (
       <div className="left_button" onClick={onClick}>
@@ -15,6 +16,7 @@ function Row({ title, videos }) {
     );
   };
 
+  //Slider Next button
   const Next = ({ onClick }) => {
     return (
       <div className="right_button" onClick={onClick}>
@@ -40,6 +42,10 @@ function Row({ title, videos }) {
     nextArrow: <Next />,
   };
 
+  const clicked = (i) => {
+    funcs.show(tag, i);
+  };
+
   return (
     <div className="row_wrapper">
       <h2 className="row-title">{title}</h2>
@@ -51,6 +57,7 @@ function Row({ title, videos }) {
             media_type,
             poster_path,
             backdrop_path,
+            id,
           } = item;
           const title__ = original_title
             ? sanitizer(original_title)
@@ -61,7 +68,13 @@ function Row({ title, videos }) {
           if (backdrop_path == null) return;
 
           return (
-            <div className="col" key={item.id}>
+            <div
+              className="col"
+              key={item.id}
+              onClick={(e) => {
+                clicked(item);
+              }}
+            >
               <img
                 className="poster"
                 src={posterURL(backdrop_path, "s")}
@@ -71,6 +84,8 @@ function Row({ title, videos }) {
           );
         })}
       </Slider>
+
+      {pop && pop}
     </div>
   );
 }

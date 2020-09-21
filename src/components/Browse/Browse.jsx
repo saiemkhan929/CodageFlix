@@ -7,6 +7,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./browse.scss";
 import { API_CONSTS, useFetch } from "../../API/api";
+import Popup from "./Popup";
 
 //We may need to shuffle the list so that it looks good
 function shuffle(a) {
@@ -26,9 +27,14 @@ const bannerInfo = (variable) => {
     // Generate a random number
     var i = Math.floor(Math.random() * variable.length - 1);
 
+    console.log(variable[i].backdrop_path);
+
     // fetch the banner image from there
     banner_image =
-      variable[i].backdrop_path != undefined ? variable[i].backdrop_path : null;
+      variable[i].backdrop_path != undefined ||
+      null != variable[i].backdrop_path
+        ? variable[i].backdrop_path
+        : null;
     console.log("Found and url was :", banner_image + " and i: " + i);
     let count = 0;
     while (
@@ -63,17 +69,13 @@ function Browse() {
   const newReleases = useFetch(API_CONSTS.NEW_RELEASE);
   const actionAdventures = useFetch(API_CONSTS.ACTION_ADVENTURE);
   const documentaries = useFetch(API_CONSTS.DOCUMENTARIES);
-  const tvSerials = useFetch(API_CONSTS.TV_SERIALS);
-  const hindi = useFetch(API_CONSTS.HINDI_MOVIES);
   const horror = useFetch(API_CONSTS.HORROR_MOVIES);
 
   loadingState[0] = trends;
   loadingState[1] = newReleases;
   loadingState[2] = actionAdventures;
   loadingState[3] = documentaries;
-  loadingState[4] = tvSerials;
-  loadingState[5] = hindi;
-  loadingState[6] = horror;
+  loadingState[4] = horror;
 
   //setting loading condition
   if (loadingState.length > 0) {
@@ -91,11 +93,17 @@ function Browse() {
   // Filtering the trend to get populars
   let popular = trends && trends.filter(({ vote_average }) => vote_average > 7);
 
-  //Get details for banner
+  //Show popup
 
-  let title__ = "";
-  let details = "";
-  let poster = "";
+  const [state, setState] = useState({});
+
+  const showPopup = (tag, item) => {
+    setState({ [tag]: <Popup item={item} hide={hidePopup} /> });
+  };
+
+  const hidePopup = () => {
+    setState({});
+  };
 
   //Generate random banner
   useEffect(() => {
@@ -115,15 +123,59 @@ function Browse() {
       <Nav />
       <Banner movie={banner} />
 
-      <Row title="Popular on CodageFlix" videos={popular && shuffle(popular)} />
-      <Row title="Trending Now" videos={trends} />
-      <Row title="New Releases" videos={newReleases} />
-      <Row title="Action & Adventures" videos={actionAdventures} />
+      <Row
+        funcs={{ show: showPopup, hide: hidePopup }}
+        title="Popular on CodageFlix"
+        videos={popular && shuffle(popular)}
+        tag="popular"
+        pop={state.popular && state.popular}
+      />
+      {/* Popup for popular row */}
 
-      <Row title="Documentaries" videos={documentaries} />
-      <Row title="Tv Serials" videos={tvSerials} />
-      <Row title="Tv Serials" videos={hindi} />
-      <Row title="Horror Movies" videos={horror} />
+      <Row
+        funcs={{ show: showPopup, hide: hidePopup }}
+        title="Trending Now"
+        videos={trends}
+        tag="trending"
+        pop={state.trending && state.trending}
+      />
+      {/* Popup for trending row */}
+
+      <Row
+        funcs={{ show: showPopup, hide: hidePopup }}
+        title="New Releases"
+        videos={newReleases}
+        tag="newrelease"
+        pop={state.newrelease && state.newrelease}
+      />
+      {/* Popup for newrelease row */}
+
+      <Row
+        funcs={{ show: showPopup, hide: hidePopup }}
+        title="Action & Adventures"
+        videos={actionAdventures}
+        tag="actions"
+        pop={state.actions && state.actions}
+      />
+      {/* Popup for actions row */}
+
+      <Row
+        funcs={{ show: showPopup, hide: hidePopup }}
+        title="Documentaries"
+        videos={documentaries}
+        tag="documentaries"
+        pop={state.documentaries && state.documentaries}
+      />
+      {/* Popup for documentaries row */}
+
+      <Row
+        funcs={{ show: showPopup, hide: hidePopup }}
+        title="Horror Movies"
+        videos={horror}
+        tag="horrow"
+        pop={state.horrow && state.horrow}
+      />
+      {/* Popup for horror row */}
     </div>
   );
 }

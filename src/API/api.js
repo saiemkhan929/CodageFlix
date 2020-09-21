@@ -36,6 +36,24 @@ const posterURL = (part, size = "m") => {
   }
 };
 
+const useVideoDetails = (id, dependencies = []) => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    instance
+      .get(`/movie/${id}/videos${API_KEY}&language=en-US`)
+      .then((onlineData) => {
+        setData(onlineData.data.results);
+      });
+
+    return () => {
+      console.log("Clean up performing");
+    };
+  }, dependencies);
+
+  return data;
+};
+
 //Create base url
 const instance = axios.create({
   baseURL: BASE_URL,
@@ -58,4 +76,85 @@ const useFetch = (URL, dependencies = []) => {
   return data;
 };
 
-export { posterURL, instance, API_CONSTS, useFetch };
+const Genres = {
+  genres: [
+    {
+      id: 28,
+      name: "Action",
+    },
+    {
+      id: 12,
+      name: "Adventure",
+    },
+    {
+      id: 16,
+      name: "Animation",
+    },
+    {
+      id: 35,
+      name: "Comedy",
+    },
+    {
+      id: 80,
+      name: "Crime",
+    },
+    {
+      id: 99,
+      name: "Documentary",
+    },
+    {
+      id: 18,
+      name: "Drama",
+    },
+    {
+      id: 10751,
+      name: "Family",
+    },
+    {
+      id: 14,
+      name: "Fantasy",
+    },
+    {
+      id: 36,
+      name: "History",
+    },
+    {
+      id: 27,
+      name: "Horror",
+    },
+    {
+      id: 10402,
+      name: "Music",
+    },
+    {
+      id: 9648,
+      name: "Mystery",
+    },
+    {
+      id: 10749,
+      name: "Romance",
+    },
+    {
+      id: 878,
+      name: "Science Fiction",
+    },
+    {
+      id: 10770,
+      name: "TV Movie",
+    },
+    {
+      id: 53,
+      name: "Thriller",
+    },
+    {
+      id: 10752,
+      name: "War",
+    },
+    {
+      id: 37,
+      name: "Western",
+    },
+  ],
+};
+
+export { posterURL, instance, API_CONSTS, useFetch, API_KEY, Genres };

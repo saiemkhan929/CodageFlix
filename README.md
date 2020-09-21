@@ -1,9 +1,12 @@
-Version 1.0
+### Version 1.1
 
-### Version 1.0
+# Features
 
-## Change logs
+- Click to open popup below each row
+- If clicked another movie then others popup will be closed auto
+- Dynamically Genre fetching
+- Now this app is mobile responsive
 
-- Page loading introduced
-- Fixed several bugs on Banner
-- Speed optimized
+# Debugging
+
+- Lots of bug fixed
