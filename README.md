@@ -2,6 +2,15 @@
 
 # Deployed at
  - https://codageflix.web.app/
+ 
+# This App made of
+
+- Firebase (As hosting)
+- API from https://api.openweathermap.org/
+- Materialize css
+- Slick Carousel
+- Youtube-react component
+- AXIOS for AJAX requests
 
 # Features
 
