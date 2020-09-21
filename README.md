@@ -1,5 +1,8 @@
 ### Version 1.1
 
+# Deployed at
+ - https://codageflix.web.app/
+
 # Features
 
 - Click to open popup below each row
