@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { posterURL } from "../../API/api";
 import Slider from "react-slick";
-import Popup from "./Popup";
 
-function Row({ title, videos, isPopActive }) {
+function Row({ title, videos, funcs, tag, pop }) {
   const sanitizer = (text) => {
     return text.replace(/#/gi, "");
   };
@@ -26,9 +25,6 @@ function Row({ title, videos, isPopActive }) {
     );
   };
 
-  //select popup div
-  let popup = document.querySelector(".popup");
-
   var settings = {
     dots: true,
     arrows: true,
@@ -44,6 +40,10 @@ function Row({ title, videos, isPopActive }) {
     ),
     prevArrow: <Prev />,
     nextArrow: <Next />,
+  };
+
+  const clicked = (i) => {
+    funcs.show(tag, i);
   };
 
   return (
@@ -71,19 +71,21 @@ function Row({ title, videos, isPopActive }) {
             <div
               className="col"
               key={item.id}
-              onMouseOver={(e) => {}}
-              onMouseOut={(e) => {}}
+              onClick={(e) => {
+                clicked(item);
+              }}
             >
               <img
                 className="poster"
                 src={posterURL(backdrop_path, "s")}
                 alt={title__}
               />
-              <Popup src={posterURL(backdrop_path, "l")} id={id} />
             </div>
           );
         })}
       </Slider>
+
+      {pop && pop}
     </div>
   );
 }

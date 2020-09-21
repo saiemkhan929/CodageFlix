@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import YouTube from "react-youtube";
-import { instance, API_KEY } from "../../API/api";
+import { instance, API_KEY, posterURL } from "../../API/api";
+import ratio from "../../API/ratio";
 
-function Popup({ src, id }) {
+function Popup({ item, hide }) {
+  const [close, setClose] = useState(true);
+  const [genre, setgenre] = useState([]);
   const [video, setVideo] = useState(false);
   const [videoID, setVideoID] = useState(null);
   const [styles, setStyles] = useState({
@@ -16,14 +19,34 @@ function Popup({ src, id }) {
 
   const [videoInfo, setVideoInfo] = useState(null);
 
+  const closePop = () => {
+    setClose(true);
+    hide();
+  };
+
   let time;
+
+  const getGenre = () => {
+    if (genre.length == 0) {
+      console.log("Sending request for Genre...");
+      instance
+        .get(`/movie/${id}${API_KEY}&language=en-US`)
+        .then((onlineData) => {
+          //Set Video id
+          setgenre(onlineData.data.genres);
+        });
+    } else {
+      console.log("Already genre sent request...");
+    }
+  };
 
   const showVideo = () => {
     if (video == false) {
-      console.log("Sending request...");
+      console.log("Sending request for trailer...");
       instance
         .get(`/movie/${id}/videos${API_KEY}&language=en-US`)
         .then((onlineData) => {
+          console.log(onlineData.data.results[0]);
           //Set Video id
           setVideoID(
             null != onlineData.data.results[0]
@@ -55,27 +78,37 @@ function Popup({ src, id }) {
     });
   };
 
-  const hideVideo = () => {
-    console.log("Hide video", videoInfo);
-    //if (videoInfo != null) videoInfo.pauseVideo();
-    //setVideo(false);
+  useEffect(() => {
+    if (item != null) {
+      //If it passes the condition then make it false
+      setClose(false);
+      showVideo();
+      //request for genres
+      getGenre();
+    }
 
-    time = setTimeout(() => {
-      if (videoInfo != null) videoInfo.pauseVideo();
-    }, 1000);
-  };
+    return () => {};
+  }, [item]);
+
+  if (item == null) return <span></span>;
+
+  const { id, genre_ids, overview } = item;
+
+  const path =
+    item.backdrop_path != null ? item.backdrop_path : item.poster_path;
 
   return (
-    <div
-      className="popup"
-      onMouseOut={() => {
-        hideVideo();
-      }}
-      onMouseOver={() => {
-        showVideo();
-      }}
-    >
+    <div className="popup" style={{ display: close ? "none" : "flex" }}>
       <div className="upper">
+        <div
+          className="close-pop"
+          onClick={() => {
+            closePop();
+          }}
+        >
+          <i className="material-icons">clear</i>
+        </div>
+
         {video == true && videoID != null ? (
           <div style={styles.youtube}>
             <YouTube
@@ -85,7 +118,8 @@ function Popup({ src, id }) {
                   autoplay: 1,
                   controls: 0,
                 },
-                width: "100%",
+                width: ratio(4, 2).width,
+                height: ratio(4, 2).height,
               }}
               width="100"
               onReady={(e) => {
@@ -96,7 +130,11 @@ function Popup({ src, id }) {
         ) : (
           ""
         )}
-        <img style={styles.fallback} className="popup-banner" src={src} />
+        <img
+          style={styles.fallback}
+          className="popup-banner"
+          src={posterURL(path, "l")}
+        />
       </div>
       <div className="lower">
         <div className="btn_groups">
@@ -115,9 +153,8 @@ function Popup({ src, id }) {
         </div>
         <div className="genres">
           <ul>
-            <li>Action</li>
-            <li>Drama</li>
-            <li>Horrow</li>
+            {genre.length > 0 &&
+              genre.map((item, i) => <li key={i}>{item.name}</li>)}
           </ul>
         </div>
       </div>

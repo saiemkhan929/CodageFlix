@@ -1,12 +1,12 @@
-Version 1.1
-
 ### Version 1.1
 
-## Proposed (Branch - HoverToWatch)
+# Features
 
-- Hover to watch the trailer
-- Trailer will load seperately once it's hovered
+- Click to open popup below each row
+- If clicked another movie then others popup will be closed auto
+- Dynamically Genre fetching
+- Now this app is mobile responsive
 
-## Issues
+# Debugging
 
-- Sometimes video keep running even after mouse left the slide
+- Lots of bug fixed
